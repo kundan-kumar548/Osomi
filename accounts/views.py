@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST
-from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.reverse import reverse
@@ -27,19 +26,23 @@ from rest_framework.generics import (CreateAPIView,ListAPIView,UpdateAPIView,
 
 class UserDetailView(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly,IsAdminUser]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
+
+    # def get_queryset(self):
+    #     queryset = User.objects.all()[1]
+    #     return queryset
 
 
 class AddressView(viewsets.ModelViewSet):
     queryset = Address.objects.all()
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
     serializer_class = AddressSerializer
 
 
-class SignupView(viewsets.ModelViewSet):
+class UserListView(viewsets.ModelViewSet):
     queryset = UserSignup.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = SignupSerializer
 
 
@@ -67,9 +70,12 @@ class LoginLoginView(APIView):
 
     def post(self,request):
         data = request.data
+        print(data,type(data))
         serializer = UserLoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             new_data = serializer.data
+            print(serializer,type(serializer))
+            print(new_data,type(new_data))
             return Response(new_data, status=HTTP_200_OK)
         return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
 

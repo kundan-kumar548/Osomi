@@ -81,8 +81,8 @@ WSGI_APPLICATION = 'Osomi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'osomiz',
-        'USER': 'developerz',
+        'NAME': 'osomiy',
+        'USER': 'developery',
         'PASSWORD': 'python123',
         'HOST': 'localhost',
         'PORT': '5432',

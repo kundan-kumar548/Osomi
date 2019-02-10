@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('auth-user',views.UserDetailView)
-router.register('user',views.SignupView,base_name='users')
+router.register('user',views.UserListView,base_name='users')
 router.register('address',views.AddressView,base_name='address')
 router.register('profile',views.UserProfileView,base_name='usersprofile')
 router.register('artist',views.ArtistAccountView,base_name='artistaccount')

@@ -9,52 +9,59 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
 
+# Auth user with admin Hyperlink serializer
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='user-detail')
+    # url = serializers.HyperlinkedIdentityField(view_name='user-detail')
 
     class Meta:
         model = User
-        fields = 'id','url','username','email','first_name','last_name'
+        fields = 'id','username','email','first_name','last_name'
 
 
+# address Hyperlink serializer
 class AddressSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='address-detail')
+    # url = serializers.HyperlinkedIdentityField(view_name='address-detail')
 
     class Meta:
         model = Address
-        fields = ('id','url','address', 'landmark', 'city', 'state', 'pin', 'country')
+        fields = ('id','address', 'landmark', 'city', 'state', 'pin', 'country')
         # fields = '__all__'
 
 
+# Hyperlink signup serializer
 class SignupSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='users-detail')
+    # url = serializers.HyperlinkedIdentityField(view_name='users-detail')
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = UserSignup
-        fields = 'id','url','user','contact_number'
+        fields = 'id','user','contact_number'
 
 
+# Detailed user profile serializer
 class UsersProfileSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="usersprofile-detail")
+    # url = serializers.HyperlinkedIdentityField(view_name="usersprofile-detail")
     user = SignupSerializer(read_only=True)
     address = AddressSerializer(read_only=True,many=True)
 
     class Meta:
         model = UsersProfile
         # fields = '__all__'
-        fields = ('id','url','user','date_of_birth','gender','website','bio','address')
+        fields = ('id','user','date_of_birth','gender','website','bio','address')
 
 
+# Artist detailed profile serializer
 class ArtistAccountSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="artistaccount-detail")
+    # url = serializers.HyperlinkedIdentityField(view_name="artistaccount-detail")
+    user = UsersProfileSerializer(read_only=True)
 
     class Meta:
         model = ArtistAccount
         # fields = '__all__'
-        fields = ('id','url','user','email2','specialist_In')
+        fields = ('uuid','user','email2','specialist_In','aadhar_number','PAN_number')
 
 
+# Signup serializer
 class UserSignupSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=60)
     last_name = serializers.CharField(max_length=60)
@@ -89,6 +96,7 @@ class UserSignupSerializer(serializers.Serializer):
         return validated_data
 
 
+# login serializer
 class UserLoginSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=60, read_only=True)
     last_name = serializers.CharField(max_length=60, read_only=True)

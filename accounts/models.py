@@ -1,6 +1,7 @@
 from django.db import models
 from django.core import validators
 from django.contrib.auth.models import User
+import uuid
 
 
 # Address
@@ -45,6 +46,7 @@ class UsersProfile(models.Model):
 
 # Artists account details
 class ArtistAccount(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(UsersProfile, on_delete=models.CASCADE)
     email2 = models.EmailField(max_length=60)
     ARTIST_TYPE = (
@@ -54,6 +56,8 @@ class ArtistAccount(models.Model):
         ("Other small business","Other small business"),
     )
     specialist_In = models.CharField(max_length=50, choices=ARTIST_TYPE, default="Painters")
+    aadhar_number = models.CharField(max_length=12)
+    PAN_number = models.CharField(max_length=10)
 
     def __str__(self):
         return self.user.user.user.email
